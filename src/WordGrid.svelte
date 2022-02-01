@@ -1,4 +1,6 @@
 <script>
+  import { scale } from 'svelte/transition'
+
   export let letters = []
 
   const rows = 6
@@ -6,17 +8,33 @@
 
   $: boxes = [
     ...letters,
-    ...Array(rows * columns - letters.length).fill({
+    ...Array(Math.max(0, rows * columns - letters.length)).fill({
       content: '',
       status: 'empty',
     }),
   ]
+
+  const animDuration = 300
 </script>
 
 <div class="Grid">
   {#each boxes as box, i}
-    <div class="Item {box.status}">
-      <div class="Letter">{box.content.toUpperCase()}</div>
+    <div class="ItemContainer">
+      {#if box.status === 'guessing'}
+        <div class="Item {box.status}" out:scale={{ duration: animDuration }}>
+          <div class="Letter">{box.content.toUpperCase()}</div>
+        </div>
+      {:else}
+        <div
+          class="Item {box.status}"
+          in:scale={{
+            duration: animDuration,
+            delay: animDuration,
+          }}
+        >
+          <div class="Letter">{box.content.toUpperCase()}</div>
+        </div>
+      {/if}
     </div>
   {/each}
 </div>
@@ -30,10 +48,14 @@
     column-gap: 5px;
     row-gap: 5px;
   }
+  .ItemContainer {
+    display: flex;
+  }
   .Item {
     font-weight: bold;
     font-size: 2em;
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
   }
 

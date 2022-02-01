@@ -30,20 +30,27 @@
     'snipe',
     'hobby',
     'crake',
+    'galah',
+    'miner',
   ]
   let guesses = []
 
   let current = ''
 
   const wordLength = 5
+  const maxGuesses = 6
 
   $: content = [
     ...guesses.flat(),
-    ...current.split('').map((c) => ({ content: c, status: 'guessing' })),
-    ...Array(wordLength - current.length).fill({
-      content: '',
-      status: 'guessing',
-    }),
+    ...(guesses.length < maxGuesses
+      ? current.split('').map((c) => ({ content: c, status: 'guessing' }))
+      : []),
+    ...(guesses.length < maxGuesses
+      ? Array(wordLength - current.length).fill({
+          content: '',
+          status: 'guessing',
+        })
+      : []),
   ]
 
   const addLetter = (letter) => {
@@ -77,11 +84,16 @@
 
     guesses = [...guesses, result]
 
+    current = ''
+
     if (result.reduce((acc, curr) => acc && curr.status === 'correct')) {
-      alert('You guessed the bird!')
+      setTimeout(() => alert('You guessed the bird!'), 1000)
+      return
     }
 
-    current = ''
+    if (guesses.length >= maxGuesses) {
+      setTimeout(() => alert(`The bird was ${answer}`), 1000)
+    }
   }
 
   const handleKeydown = (evt) => {

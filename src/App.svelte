@@ -1,5 +1,6 @@
 <script>
   import WorldGrid from './WordGrid.svelte'
+  import OnScreenKeyboard from './OnScreenKeyboard.svelte'
 
   const answer = 'goose'
   const birdList = [
@@ -55,6 +56,8 @@
       : []),
   ]
 
+  $: foundLetters = new Map(guesses.flat().map((g) => [g.content, g.status]))
+
   const addLetter = (letter) => {
     current = current + letter.toLowerCase()
   }
@@ -96,6 +99,11 @@
     if (guesses.length >= maxGuesses) {
       setTimeout(() => alert(`The bird was ${answer}`), 1000)
     }
+
+    console.log('found letters: ')
+    console.log(foundLetters)
+    console.log('guesses:')
+    console.log(guesses)
   }
 
   const handleKeydown = (evt) => {
@@ -112,17 +120,21 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <main>
-  <h1>Birdle</h1>
   <p>Guess the 5 letter bird</p>
   <div class="Game">
     <WorldGrid letters={content} />
+    <OnScreenKeyboard
+      keyPressed={addLetter}
+      enterPressed={makeGuess}
+      backspacePressed={removeLetter}
+      {foundLetters}
+    />
   </div>
 </main>
 
 <style>
   main {
     text-align: center;
-    padding: 1em;
     max-width: 240px;
     margin: 0 auto;
   }
@@ -130,7 +142,7 @@
   h1 {
     color: #ff3e00;
     text-transform: uppercase;
-    font-size: 4em;
+    font-size: 2em;
     font-weight: 100;
   }
 
@@ -142,6 +154,7 @@
 
   .Game {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 </style>

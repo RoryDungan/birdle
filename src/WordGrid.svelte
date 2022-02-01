@@ -8,7 +8,7 @@
 
   $: boxes = [
     ...letters,
-    ...Array(Math.max(0, rows * columns - letters.length)).fill({
+    ...Array(rows * columns - letters.length).fill({
       content: '',
       status: 'empty',
     }),
@@ -43,8 +43,8 @@
   .Grid {
     flex: 0 1 auto;
     display: grid;
-    grid-template-columns: repeat(5, 62px);
-    grid-auto-rows: 62px;
+    grid-template-columns: repeat(5, min(62px, 8vh));
+    grid-auto-rows: min(62px, 8vh);
     column-gap: 5px;
     row-gap: 5px;
   }

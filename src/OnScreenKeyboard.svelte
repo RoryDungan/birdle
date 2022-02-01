@@ -14,14 +14,16 @@
     {/each}
   </div>
   <div class="row">
+    <div class="spacer" />
     {#each 'asdfghjkl'.split('') as l}
       <button on:click={keyPressed(l)} class={'key ' + letterClass(l)}
         >{l.toUpperCase()}</button
       >
     {/each}
+    <div class="spacer" />
   </div>
   <div class="row">
-    <button on:click={enterPressed()} class="key untried">ENTER</button>
+    <button on:click={enterPressed()} class="key untried enter">ENTER</button>
     {#each 'zxcvbnm'.split('') as l}
       <button on:click={keyPressed(l)} class={'key ' + letterClass(l)}
         >{l.toUpperCase()}</button
@@ -51,20 +53,28 @@
   }
 
   .key {
-    /* display: flex; */
     flex: 1;
     margin: 2px;
     border: 0;
     font-weight: bold;
     height: 58px;
+    width: min(8vw, 43px);
     border-radius: 4px;
   }
 
-  /* .row {
-    display: flex;
-    width: 100%;
+  .enter {
+    width: min(16vw, 64px);
   }
 
+  .spacer {
+    width: min(4vw, 21px);
+  }
+
+  .row {
+    display: flex;
+  }
+
+  /*
   .keyboard {
     display: flex;
     flex-direction: column;

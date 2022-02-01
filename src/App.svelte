@@ -120,28 +120,37 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <main>
+  <!-- <h1>Birdle</h1> -->
   <p>Guess the 5 letter bird</p>
-  <div class="Game">
+  <div class="GridContainer">
     <WorldGrid letters={content} />
-    <OnScreenKeyboard
-      keyPressed={addLetter}
-      enterPressed={makeGuess}
-      backspacePressed={removeLetter}
-      {foundLetters}
-    />
   </div>
+  <OnScreenKeyboard
+    keyPressed={addLetter}
+    enterPressed={makeGuess}
+    backspacePressed={removeLetter}
+    {foundLetters}
+  />
 </main>
 
 <style>
   main {
     text-align: center;
-    margin: 0 auto;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
   }
 
   h1 {
     color: #ff3e00;
     text-transform: uppercase;
-    font-size: 2em;
+    font-size: 3em;
     font-weight: 100;
   }
 
@@ -151,9 +160,10 @@
     }
   }
 
-  .Game {
+  .GridContainer {
     display: flex;
+    flex: 1 2 100px;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
   }
 </style>

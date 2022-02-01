@@ -33,12 +33,27 @@
   ]
   const guesses = []
   $: guessedLetters = new Set(guesses.join('').split(''))
+
+  const testContent = [
+    { content: 'e', status: 'correct' },
+    { content: 'a', status: 'incorrect' },
+    { content: 'g', status: 'misplaced' },
+    { content: 'l', status: 'incorrect' },
+    { content: 'e', status: 'incorrect' },
+    { content: 'a', status: 'guessing' },
+    { content: 's', status: 'guessing' },
+    { content: 'd', status: 'guessing' },
+    { content: 'f', status: 'guessing' },
+    { content: '', status: 'guessing' },
+  ]
 </script>
 
 <main>
   <h1>Birdle</h1>
   <p>Guess the 5 letter bird</p>
-  <WorldGrid />
+  <div class="Game">
+    <WorldGrid letters={testContent} />
+  </div>
 </main>
 
 <style>
@@ -60,5 +75,10 @@
     main {
       max-width: none;
     }
+  }
+
+  .Game {
+    display: flex;
+    justify-content: center;
   }
 </style>

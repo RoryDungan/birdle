@@ -23,6 +23,7 @@
     'terns',
     'gulls',
     'serin',
+    'swans',
     'grebe',
     'owlet',
     'pipit',
@@ -32,6 +33,7 @@
     'crake',
     'galah',
     'miner',
+    'egret',
   ]
   let guesses = []
 

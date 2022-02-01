@@ -92,12 +92,12 @@
     current = ''
 
     if (result.reduce((acc, curr) => acc && curr.status === 'correct')) {
-      setTimeout(() => alert('You guessed the bird!'), 1000)
+      setTimeout(() => alert('You guessed the bird!'), 2000)
       return
     }
 
     if (guesses.length >= maxGuesses) {
-      setTimeout(() => alert(`The bird was ${answer}`), 1000)
+      setTimeout(() => alert(`The bird was ${answer}`), 2000)
     }
 
     console.log('found letters: ')

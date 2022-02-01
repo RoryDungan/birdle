@@ -1,5 +1,6 @@
 <script>
   import { scale } from 'svelte/transition'
+  import { cubicOut } from 'svelte/easing'
 
   export let letters = []
 
@@ -15,21 +16,36 @@
   ]
 
   const animDuration = 300
+  const letterDelay = 300
+
+  const flipTransition = (
+    node,
+    { delay = 0, easing = cubicOut, duration = 400 }
+  ) => ({
+    delay,
+    easing,
+    duration,
+    css: (_t, u) => `
+      transform: scale(1, ${1 - 1 * u});
+    `,
+  })
 </script>
 
 <div class="Grid">
   {#each boxes as box, i}
     <div class="ItemContainer">
       {#if box.status === 'guessing'}
-        <div class="Item {box.status}" out:scale={{ duration: animDuration }}>
+        <div
+          class="Item {box.status}"
+          out:flipTransition={{ delay: letterDelay * (i % columns) }}
+        >
           <div class="Letter">{box.content.toUpperCase()}</div>
         </div>
       {:else}
         <div
           class="Item {box.status}"
-          in:scale={{
-            duration: animDuration,
-            delay: animDuration,
+          in:flipTransition={{
+            delay: animDuration + letterDelay * (i % columns),
           }}
         >
           <div class="Letter">{box.content.toUpperCase()}</div>

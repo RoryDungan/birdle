@@ -49,14 +49,18 @@
     row-gap: 5px;
   }
   .ItemContainer {
-    display: flex;
+    position: relative;
   }
   .Item {
     font-weight: bold;
     font-size: 2em;
     display: flex;
-    flex: 1 1 auto;
     align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   .empty {

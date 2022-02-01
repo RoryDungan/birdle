@@ -2,7 +2,7 @@
   import WorldGrid from './WordGrid.svelte'
 
   const answer = 'goose'
-  const wordList = [
+  const birdList = [
     'eagle',
     'chook',
     'goose',
@@ -31,28 +31,77 @@
     'hobby',
     'crake',
   ]
-  const guesses = []
-  $: guessedLetters = new Set(guesses.join('').split(''))
+  let guesses = []
 
-  const testContent = [
-    { content: 'e', status: 'correct' },
-    { content: 'a', status: 'incorrect' },
-    { content: 'g', status: 'misplaced' },
-    { content: 'l', status: 'incorrect' },
-    { content: 'e', status: 'incorrect' },
-    { content: 'a', status: 'guessing' },
-    { content: 's', status: 'guessing' },
-    { content: 'd', status: 'guessing' },
-    { content: 'f', status: 'guessing' },
-    { content: '', status: 'guessing' },
+  let current = ''
+
+  const wordLength = 5
+
+  $: content = [
+    ...guesses.flat(),
+    ...current.split('').map((c) => ({ content: c, status: 'guessing' })),
+    ...Array(wordLength - current.length).fill({
+      content: '',
+      status: 'guessing',
+    }),
   ]
+
+  const addLetter = (letter) => {
+    current = current + letter.toLowerCase()
+  }
+
+  const removeLetter = () => {
+    current = current.slice(0, current.length - 1)
+  }
+
+  const makeGuess = () => {
+    if (current.length < wordLength) {
+      alert('Not enough letters!')
+      return
+    }
+
+    if (birdList.indexOf(current) < 0) {
+      alert('Not a bird!')
+      return
+    }
+
+    const result = current.split('').map((c, i) => ({
+      content: c,
+      status:
+        answer[i] === c
+          ? 'correct'
+          : answer.indexOf(c) >= 0
+          ? 'misplaced'
+          : 'incorrect',
+    }))
+
+    guesses = [...guesses, result]
+
+    if (result.reduce((acc, curr) => acc && curr.status === 'correct')) {
+      alert('You guessed the bird!')
+    }
+
+    current = ''
+  }
+
+  const handleKeydown = (evt) => {
+    if (/^[a-z]$/i.test(evt.key) && current.length < wordLength) {
+      addLetter(evt.key)
+    } else if (evt.key === 'Backspace') {
+      removeLetter()
+    } else if (evt.key === 'Enter') {
+      makeGuess()
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <main>
   <h1>Birdle</h1>
   <p>Guess the 5 letter bird</p>
   <div class="Game">
-    <WorldGrid letters={testContent} />
+    <WorldGrid letters={content} />
   </div>
 </main>
 

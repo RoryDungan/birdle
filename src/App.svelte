@@ -44,15 +44,16 @@
   const maxGuesses = 6
 
   $: content = [
+    // Previous guesses
     ...guesses.flat(),
+    // Current word (editable)
     ...(guesses.length < maxGuesses
-      ? current.split('').map((c) => ({ content: c, status: 'guessing' }))
-      : []),
-    ...(guesses.length < maxGuesses
-      ? Array(wordLength - current.length).fill({
-          content: '',
-          status: 'guessing',
-        })
+      ? [
+          // current letters
+          ...current.split(''),
+          // pad with empty spaces to fill length
+          ...new Array(wordLength - current.length).fill(''),
+        ].map((c) => ({ content: c, status: 'guessing' }))
       : []),
   ]
 

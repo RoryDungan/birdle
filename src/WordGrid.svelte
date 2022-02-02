@@ -9,7 +9,7 @@
 
   $: boxes = [
     ...letters,
-    ...Array(rows * columns - letters.length).fill({
+    ...new Array(rows * columns - letters.length).fill({
       content: '',
       status: 'empty',
     }),

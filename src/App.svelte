@@ -56,7 +56,40 @@
       : []),
   ]
 
-  $: foundLetters = new Map(guesses.flat().map((g) => [g.content, g.status]))
+  $: foundLetters = new Map(
+    guesses
+      .flat()
+      .map((g) => [g.content, g.status])
+      // In order to trim to only one entry per letter, first sort guesses by letter
+      // and then combine adjacent entries of the same letter
+      .sort((a, b) => {
+        if (a < b) {
+          return -1
+        }
+        if (a > b) {
+          return 1
+        }
+        return 0
+      })
+      .reduce((acc, curr) => {
+        if (acc.length <= 0) {
+          return [curr]
+        }
+        // When combining, if one entry is 'correct' and the other is 'misplaced',
+        // the result should be 'correct'
+        const lastItem = acc[acc.length - 1]
+        if (lastItem[0] === curr[0]) {
+          const newItem = [
+            curr[0],
+            curr[1] === 'correct' || lastItem[1] === 'correct'
+              ? 'correct'
+              : curr[1],
+          ]
+          return [...acc.slice(0, acc.length - 1), newItem]
+        }
+        return [...acc, curr]
+      }, [])
+  )
 
   const addLetter = (letter) => {
     current = current + letter.toLowerCase()
@@ -99,11 +132,6 @@
     if (guesses.length >= maxGuesses) {
       setTimeout(() => alert(`The bird was ${answer}`), 2000)
     }
-
-    console.log('found letters: ')
-    console.log(foundLetters)
-    console.log('guesses:')
-    console.log(guesses)
   }
 
   const handleKeydown = (evt) => {

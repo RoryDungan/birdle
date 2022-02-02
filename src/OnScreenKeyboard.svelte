@@ -1,6 +1,6 @@
 <script>
   export let keyPressed, enterPressed, backspacePressed
-  export let foundLetters = {}
+  export let foundLetters = new Map()
 
   $: letterClass = (letter) => foundLetters.get(letter) || 'untried'
 </script>

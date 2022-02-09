@@ -35,6 +35,7 @@
     'galah',
     'miner',
     'egret',
+    'quail',
   ]
   let guesses = []
 
